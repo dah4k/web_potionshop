@@ -20,7 +20,13 @@ all: $(TAG) ## Build container image
 
 .PHONY: test
 test: $(TAG) ## Test run container image
-	$(DOCKER) run --interactive --tty --rm --publish 4000:4000 --name=$(TAG) $(TAG)
+	$(DOCKER) run --rm \
+		--env DATABASE_PATH="/app/carafe_dev" \
+		--env PHX_HOST="localhost" \
+		--env SECRET_KEY_BASE="$(shell mix phx.gen.secret)" \
+		--publish 4000:4000 \
+		--name=$(TAG) \
+		$(TAG)
 
 .PHONY: clean
 clean: ## Remove container image
