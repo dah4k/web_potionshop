@@ -7,7 +7,7 @@ FROM elixir:1.17.2-otp-27-alpine
 ## https://github.com/docker-library/postgres/blob/master/16/alpine3.19/Dockerfile#L49-L51
 ENV LANG=en_US.UTF-8
 
-RUN apk add --update --no-cache gcc g++ make postgresql openrc
+RUN apk add --update --no-cache gcc g++ make postgresql postgresql-contrib openrc
 
 EXPOSE 5432
 
