@@ -20,7 +20,7 @@ all: $(TAG) ## Build container image
 
 .PHONY: test
 test: $(TAG) ## Test run container image
-	$(DOCKER) run --interactive --tty --rm --publish 1337:80 --name=$(TAG) $(TAG)
+	$(DOCKER) run --interactive --tty --rm --publish 4000:4000 --name=$(TAG) $(TAG)
 
 .PHONY: clean
 clean: ## Remove container image
