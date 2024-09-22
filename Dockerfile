@@ -13,11 +13,13 @@ EXPOSE 5432
 
 ## HACK: Start postgresql as secondary service
 ## https://github.com/gliderlabs/docker-alpine/issues/437#issuecomment-662501986
+VOLUME [ "/sys/fs/cgroup" ]
 RUN rc-update add postgresql
 RUN mkdir /run/openrc
 RUN touch /run/openrc/softlevel
-## FIXME: FATAL: postgresql is already starting
-RUN rc-service postgresql start
+## HACK: Workaround `postgresql is already starting` error
+## https://github.com/gliderlabs/docker-alpine/issues/437#issuecomment-667456518
+RUN rc-status && rc-service postgresql start
 
 WORKDIR /app
 COPY . .
@@ -25,6 +27,7 @@ COPY . .
 ENV MIX_ENV=dev
 ENV DATABASE_URL=postgres://postgres:postgres@localhost:5432/app
 RUN mix deps.get
+## FIXME: postgresql crashed before arriving here
 RUN mix ecto.setup
 
 CMD ["mix", "phx.server"]
