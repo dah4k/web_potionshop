@@ -1,0 +1,33 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "monolith" ]
+  pull_request:
+    branches: [ "monolith" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Login to GiHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Publish the Docker image
+      run: |
+        docker build . --file Dockerfile --tag ghcr.io/dah4k/web_potionshop:$(date +%Y%m%d)
+        docker push ghcr.io/dah4k/web_potionshop:$(date +%Y%m%d)
