@@ -21,7 +21,7 @@ all: $(TAG) ## Build container image
 .PHONY: test
 test: $(TAG) ## Test run container image
 	$(DOCKER) run --rm \
-		--env DATABASE_PATH="/app/carafe_dev" \
+		--env DATABASE_PATH="/app/cache.db" \
 		--env PHX_HOST="localhost" \
 		--env SECRET_KEY_BASE="$(shell mix phx.gen.secret)" \
 		--publish 4000:4000 \

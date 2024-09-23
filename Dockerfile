@@ -89,4 +89,6 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/carafe ./
 
 USER nobody
 
-CMD ["/bin/sh", "-c", "/app/bin/migrate && /app/bin/server"]
+## HACK: sleep 5 because cannot `/app/bin/rpc_seed` before the server...
+## --rpc-eval : RPC failed with reason :noconnection
+CMD ["/bin/sh", "-c", "/app/bin/migrate; (sleep 5; /app/bin/rpc_seed)& /app/bin/server"]
